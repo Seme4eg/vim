@@ -236,8 +236,7 @@ G - go to the bottom of document
 `$ vim -S ~/mysession.vim` - or open vim with the -S option:
 
 
-Additional info
-----
+## Additional info
 
 `U` - undo all the changes on a line
 
