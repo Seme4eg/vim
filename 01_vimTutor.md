@@ -9,6 +9,8 @@ like <leader>w saves the current file
 
 <CR> = `enter` (`:help key-notation`)
 
+`:source $MYVIMRC` -- applyes changes to _.vimrc_ without reloading vim
+
 
 
 ## Sources
@@ -40,7 +42,68 @@ Installed [fugitive](https://github.com/tpope/vim-fugitive)
 Installed [syntastic](https://github.com/vim-syntastic/syntastic)
 
 
-## Copy / paste regs
+
+## Advanced movement and visual selecting
+
+`v` -- select text -- enter command mode (`:`) (:'<,'>w) will
+appear - 'w {filename} -- save selected text to file {filename}
+
+`ctrl+v` --> select block --> by moving with `w` or `e` you can select
+words, and by pressing `o` toggles cursor to opposite corner
+
+**vertical movement:**
+
+{number}| - move to a certain column
+zL/zH - move the view on the text half a screenwidth to the right/left
+
+`g[hjkl]` -- goes thrue the **visual** lines (only if line wrapping is on)
+
+ctrl+( or ) -> move to the beginning / end of sentence
+ctrl+{ or } -> move to the beginning / end of paragraphs
+
+> More: see :h motion.txt
+
+
+
+## Extending ':' knowledge
+
+**all commands below are supposed to be used in `:` mode**
+
+`! {bash_command}` - run external command
+
+`r {filename/bash_command} - puts {filename} content / {command} output below the cursor
+
+`CTRL-D` - see possible completions
+
+`!sort` - sorts selected lines
+
+`e[dit]` called with no arguments will revert to the latest saved
+version of the current file. To discard unwanted changes - add '!' | `:e!`
+
+`earlier 2m` - vim will go to the file 2 minutes ago
+
+`@:` - repeat last command-line [count] times (useful with switching buffers)
+
+
+
+## Copy / paste
+
+### Yanking
+
+**line duplication**:
+
+`:{column_number}y[ank]` -- yanks given line without moving the cursor
+
+`:{yank_line_number}copy{paste_line_number}` - copy from line 9 after line 16
+
+> command 'copy' has shortcut - `t`, so the command can be written: `9t16` for example
+
+`.` - shortcut for number of line cursor is positioned at atm
+
+so the example above can be reduced to `9t.`, which is `:[range]copy {address}`
+
+
+### Registers
 
 vim has 35 copy buffers
 
@@ -94,7 +157,14 @@ lines containing 'TODO' word into reg. A
 :set paste -- enable paste mode (useful when pasting from system clipboard)
 
 
-## The substitute command
+## Searching / replacing
+
+`:set {options}` - set options for search
+- 'ic' 'ignorecase'	ignore upper/lower case when searching
+- 'is' 'incsearch'	show partial matches for a search phrase
+- 'hls' 'hlsearch'	highlight all matching phrases
+
+**substitute command:**
 
 `:s/old/new/g` - substitute 'new' for 'old' on current **line**
 `:%s/old/new/g` - to change every occurrence in the **whole file**
@@ -106,23 +176,20 @@ change every occurrence of a character string between two lines:
 :nohl -> to disable highlighting of search instances --
 
 
-## Line duplication
+**operating on search matches using 'gn'**:
 
-`:{column_number}y[ank]` -- yanks given line without moving the cursor
+`gn` - Search forward for the last used search pattern, like with n,
+and start Visual mode to select the match. If the cursor is on the
+match, visually selects it. If an operator is pending, operates on the
+match. (_`cgn` - del next occurance of the match and enter insert mode_)
 
-`:{yank_line_number}copy{paste_line_number}` - copy from line 9 after line 16
-
-> command 'copy' has shortcut - `t`, so the command can be written: `9t16` for example
-
-`.` - shortcut for number of line cursor is positioned at atm
-
-so the example above can be reduced to `9t.`, which is `:[range]copy {address}`
+> `gUgn` - upcase next search match
 
 
-------------------------
 
+## Navigation
 
-## Windows
+### Windows
 
 http://vimcasts.org/episodes/working-with-windows/
 
@@ -141,7 +208,7 @@ http://vimcasts.org/episodes/working-with-windows/
 > See also: :help CTRL-W
 
 
-## Tabs
+### Tabs
 
 http://vimcasts.org/episodes/working-with-tabs/
 
@@ -149,6 +216,16 @@ http://vimcasts.org/episodes/working-with-tabs/
 
 :tabp -> 'tab previous' - go to the previous tab
 :tabn -> 'tab next' - go to the next tab
+
+
+### Buffers
+
+:bp/:bn - next/prev buffer
+
+jump between current and prev buffer (in VIM - `C-^)
+
+`:bd!` - forsibly remove buffer from buffer list
+
 
 
 ## Changelist & Jumplist
@@ -172,13 +249,6 @@ move backwards and forwards through the jumplist with the commands:
 > under the cursor with the command: `ctrl-]`
 
 
-## Buffers
-
-:bp/:bn - next/prev buffer
-
-jump between current and prev buffer (in VIM - `C-^)
-
-`:bd!` - forsibly remove buffer from buffer list
 
 ## Hard wrapping text
 
@@ -198,8 +268,20 @@ values, see more about them
 m + {marking letter} -> mark some place in file with specified letter, to find it faster
 ' + {marking letter} -> go to the marked with this letter
 
+after editing anything in VIM, it marks first and last point of edited
+text with `[` and `]` marks respectively, so if you cut some
+paragraph, you can jump then to the beginning of changed place in the
+file by `'[`
+
+
 
 ## Keeping Coding Syntax
+
+VIM, to fix indentation in file (spaces to tabs):
+
+- :set noexpandtab
+- :retab! // can be used also on visual block
+- :set expandtab // convert tabs back to spaces
 
 if move to the beginning of a file and press eigher <, > or =, the effect will be applied to  whole file
 
@@ -255,111 +337,15 @@ G - go to the bottom of document
 
 ## Additional info
 
-`U` - undo all the changes on a line
-
 `CTRL-G` - show your location in the file and the file status.
 
-Type  :! followed by an external command to execute that command
-
-visual mode (`v`) -- select text -- enter command mode (`:`) (:'<,'>w) will
-appear - 'w {filename} -- save selected text to file {filename}
-
-:r FILENAME  retrieves disk file FILENAME and puts it below the
-  cursor position.
-
-:r !dir  reads the output of the dir command and puts it below the
-  cursor position.
-
-Typing ":set xxx" sets the option "xxx".  Some options are:
-- 'ic' 'ignorecase'	ignore upper/lower case when searching
-- 'is' 'incsearch'	show partial matches for a search phrase
-- 'hls' 'hlsearch'	highlight all matching phrases
-> You can either use the long or the short option name.
-
-You can find help on just about any subject, by giving an argument to the
-":help" command.  Try these (don't forget pressing <ENTER>):
-
-- :help w
-- :help CTRL-D
-- :help insert-index
-- :help user-manual
-
-When typing a  :  command
-- `CTRL-D` - see possible completions.
-- `<TAB>` - use one completion.
-
----
-
 `g?` - rotates selected text by 13 characters (fbzr grkg gb cenpgvfr)
-
-`ctrl+v` --> select block --> by moving with `w` or `e` you can select
-words, and by pressing `o` you reverse the side from which you are
-selecting
-
-`:!sort` - sorts selected lines
-
----
-
-`:source $MYVIMRC` -- applyes changes to _.vimrc_ without reloading vim
-
-**Next character**
-
-{number}|:to a certain column
-zL - move the view on the text half a screenwidth to the right
-zH - opposite
-
-`g[hjkl]` -- goes thrue the **visual** lines (only if line wrapping is on)
-ctrl+( or ) -> move to the beginning / end of sentence
-ctrl+{ or } -> move to the beginning / end of paragraphs
-
-> More: see :h motion.txt
-
-
-`:edit` called with no arguments will revert to the latest saved
-version of the current file. To discard unwanted changes - add
-trailing ‘!’ bang.
-
-
-:earlier 2m -> vim will go to the file 2 minutes ago
-
-there is also useful thing as macros -- search in internet how to use it (pretty ez)
-
 `set showbreak=_` - make long lines more readable
 
-
-**Antipatterns**
-
-A less efficient way of doing something that becomes a bad habit:
-	- ddO instead of **S**
-	- f<lvt>U instead of **gUit** (???)
-
-
-`:e!` - restore original file
-
-
-in visual block (`C+v`) pressing `o` toggles cursor to opposite corner
-
-after editing anything in VIM, it marks first and last point of edited
-text with `[` and `]` marks respectively, so if you cut some
-paragraph, you can jump then to the beginning of changed place in the
-file by `'[`
-
+don't use f<lvt>U instead of **gUit** (???)
 
 `qall` - quit all files
 
-`@:` - repeat last command-line [count] times (useful with switching buffers)
-
-
-### Compare two files / buffers
+**compare two files / buffers**:
 
 [using vimdiff / diffthis](http://vimcasts.org/episodes/comparing-buffers-with-vimdiff/)
-
-
-### Operating on search matches using 'gn'
-
-`gn` - Search forward for the last used search pattern, like with n,
-and start Visual mode to select the match. If the cursor is on the
-match, visually selects it. If an operator is pending, operates on the
-match. (_`cgn` - del next occurance of the match and enter insert mode_)
-
-> `gUgn` - upcase next search match

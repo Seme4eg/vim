@@ -2,6 +2,12 @@
 h     l
    j
 
+`:help {argument}`:
+- :help w
+- :help CTRL-D
+- :help insert-index
+- :help user-manual
+
 ## WORD vs word
 
 A **WORD** consists of a sequence of non-blank characters, separated with white space. An empty line is also considered to be a WORD. Use 'W', 'E', and 'B' to navigate WORDs.
@@ -19,6 +25,9 @@ A **word** consists of a sequence of letters, digits and underscores, or a seque
 
 - d{motion} -- delete text {motion} | _dw, db, d71, dj (delete this line + line below)_
 - D -- deletes until the end of the line, synonym for 'd$' | `3D`
+
+`u` - undo last change(s)
+`U` - undo all the changes on a line
 
 - ~ -- switch case | `9~`
 
@@ -74,5 +83,7 @@ A **word** consists of a sequence of letters, digits and underscores, or a seque
 	- [ or ] - A [] block
 	- < or > - a <> block
 	- **t**ag - A HTML or XML tag block
+
+> `=i{` - indent text within the scope (or `vi{` ..)
 
 - . -- repeat the last simple change. Does not repeat a command-line command.
