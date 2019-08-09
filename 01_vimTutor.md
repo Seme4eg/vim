@@ -1,3 +1,16 @@
+## .vimrc setup
+
+basic .vimrc setup taken from
+https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+
+<leader> is changed it to ',' ('/' - def.)
+With a map leader it's possible to do extra key combinations
+like <leader>w saves the current file
+
+<CR> = `enter` (`:help key-notation`)
+
+
+
 ## Sources
 
 [derekwyatt.org](http://derekwyatt.org/vim/tutorials/index.html)
@@ -17,6 +30,10 @@ text objects:
 ## Plugins
 
 Installed [**Vundle**](https://github.com/VundleVim/Vundle.vim 'see docs') 
+- to install added plugins -- `:PluginInstall`
+- to update installed pluigns -- `:PluginUpdate`
+- [link](https://github.com/VundleVim/Vundle.vim/blob/v0.10.2/doc/vundle.txt#L234-L254)
+
 Installed [Nerdtree](https://github.com/scrooloose/nerdtree)
 Installed [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
 Installed [fugitive](https://github.com/tpope/vim-fugitive)
