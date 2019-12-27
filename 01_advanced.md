@@ -1,7 +1,6 @@
 # .vimrc setup
 
-basic .vimrc setup taken from
-https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+basic .vimrc setup taken from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
 
 _leader_ is changed it to ',' ('/' - def.)
 
@@ -19,15 +18,9 @@ _CR_ = `enter` (`:help key-notation`)
 > When you are browsing Vim’s documentation, you can follow the link
 > under the cursor with the command: `ctrl-]`
 
-[derekwyatt.org](http://derekwyatt.org/vim/tutorials/index.html)
-[vimcasts](http://vimcasts.org/episodes/archive/)
+[derekwyatt.org](http://derekwyatt.org/vim/tutorials/index.html),
+[vimcasts](http://vimcasts.org/episodes/archive/),
 [basics](http://derekwyatt.org/vim/tutorials/novice/)
-
-text objects:
-- `w`ords
-- `s`entences
-- `p`aragraphs
-- `t`ags
 
 
 # Plugins
@@ -35,7 +28,7 @@ text objects:
 - [**Vundle**](https://github.com/VundleVim/Vundle.vim 'see docs')
     - to install added plugins - `:PluginInstall`
     - to update installed pluigns - `:PluginUpdate`
-    - [link](https://github.com/VundleVim/Vundle.vim/blob/v0.10.2/doc/vundle.txt#L234-L254)
+    - [usage docs](https://github.com/VundleVim/Vundle.vim/blob/v0.10.2/doc/vundle.txt#L234-L254)
 - [Nerdtree](https://github.com/scrooloose/nerdtree)
 - [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
 - [fugitive](https://github.com/tpope/vim-fugitive)
@@ -58,8 +51,9 @@ to opposite corner
 
 `g[hjkl]` - goes thrue the **visual** lines (only if line wrapping is on)
 
-- `ctrl+( or )` -> move to the beginning / end of sentence
-- `ctrl+{ or }` -> move to the beginning / end of paragraphs
+`ctrl+( or )` -> move to the beginning / end of sentence
+
+`ctrl+{ or }` -> move to the beginning / end of paragraphs
 
 > More: see :h motion.txt
 
@@ -70,7 +64,7 @@ to opposite corner
 
 `! {bash_command}` - run external command
 
-`r {filename/bash_command} - puts {filename} content / {command} output below the cursor
+`r {filename/bash_command}` - puts {filename} content / {command} output below the cursor
 
 `CTRL-D` - see possible completions
 
@@ -105,14 +99,6 @@ so the example above can be reduced to `9t.`, which is `:[range]copy {address}`
 
 vim has **35** copy buffers
 
-`:reg` -> view the contents of registers
-
-**<C-r> in INSERT mode puts user in " mode (being able to paste from any register)**
-
-> and this also words in vim command line
-
-`<C-r><C-o>` - inserts literally from current default buffer (useful when repeating with '.' command)
-
 - 1-9 - history registers (delete registers)
 - 0 - the **yank** register
 - a-z - named registers
@@ -123,6 +109,14 @@ vim has **35** copy buffers
 - "- - small delete
 - "_ - the black hole register (_) - deleting in this register actually **deletes**
 
+`:reg` -> view the contents of registers
+
+**<C-r> in INSERT mode puts user in " mode (being able to paste from any register)**
+
+> and the thing above also works in vim command line
+
+`<C-r><C-o>` - inserts literally from current default buffer (useful when repeating with '.' command)
+
 **Read-only registers**
 
 - ": - last :command
@@ -132,7 +126,7 @@ vim has **35** copy buffers
 
 > :h registers
 
-`q{reg_name}q` - clear given register
+`q{reg_name}q` - clear given register (tho don't forget bout black hole register)
 
 
 ## Expression register
@@ -158,9 +152,10 @@ lines containing 'TODO' word into reg. A
 # Searching / replacing
 
 `:set {options}` - set options for search
-- 'ic' 'ignorecase'	ignore upper/lower case when searching
-- 'is' 'incsearch'	show partial matches for a search phrase
-- 'hls' 'hlsearch'	highlight all matching phrases
+
+- 'ic' (ignorecase)	- ignore upper/lower case when searching
+- 'is' (incsearch) - show partial matches for a search phrase
+- 'hls' (hlsearch) - highlight all matching phrases
 
 **substitute command:**
 
@@ -212,10 +207,12 @@ http://vimcasts.org/episodes/working-with-windows/
 
 http://vimcasts.org/episodes/working-with-tabs/
 
-- `:tabnew` -> creates a new tab (inside new tab is buffer, so it's possible to open a new file in it - :e
+`:tabnew` -> creates a new tab (inside new tab is buffer, so it's possible to open a new file in it - :e
   filename
-- `:tabp` -> 'tab previous' - go to the previous tab
-- `:tabn` -> 'tab next' - go to the next tab
+
+`:tabp` -> 'tab previous' - go to the previous tab
+
+`:tabn` -> 'tab next' - go to the next tab
 
 
 ## Buffers
@@ -273,11 +270,13 @@ respectively, so if you cut some paragraph, you can jump then to the beginning o
 
 VIM, to fix indentation in file (spaces to tabs):
 
-- `:set noexpandtab`
-- `:retab!` // can be used also on visual block
-- `:set expandtab` // convert tabs back to spaces
+`:set noexpandtab`
 
-if move to the beginning of a file and press eigher <, > or =, the effect will be applied to  whole file
+`:retab!` // can be used also on visual block
+
+`:set expandtab` // convert tabs back to spaces
+
+if u move to the beginning of a file and press eigher <, > or =, the effect will be applied to  whole file
 
 two times '=' -> properly indent
 
@@ -324,9 +323,11 @@ two times '=' -> properly indent
 
 # Sessions
 
-- `:mksession ~/mysession.vim`
-- `:source ~/mysession.vim` - load this session
-- `$ vim -S ~/mysession.vim` - or open vim with the -S option:
+`:mksession ~/mysession.vim`
+
+`:source ~/mysession.vim` - load this session
+
+`$ vim -S ~/mysession.vim` - or open vim with the -S option:
 
 
 # Additional info
