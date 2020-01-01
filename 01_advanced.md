@@ -2,11 +2,11 @@
 
 basic .vimrc setup taken from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
 
-_leader_ is changed it to ',' ('/' - def.)
+_leader_ is changed it to `,` (`/` - def.)
 
 With a map leader it's possible to do extra key combinations
 
-like _leader_w saves the current file
+> like `,w` with this config saves the current file
 
 _CR_ = `enter` (`:help key-notation`)
 
@@ -18,12 +18,16 @@ _CR_ = `enter` (`:help key-notation`)
 > When you are browsing Vim’s documentation, you can follow the link
 > under the cursor with the command: `ctrl-]`
 
-[derekwyatt.org](http://derekwyatt.org/vim/tutorials/index.html),
-[vimcasts](http://vimcasts.org/episodes/archive/),
-[basics](http://derekwyatt.org/vim/tutorials/novice/)
+First of all complete free levels of [this game](https://vim-adventures.com)
+
+Then go [here](http://derekwyatt.org/vim/tutorials/index.html) and go through all tutors from top to bottom,
+
+And as additional info watch some [vimcasts](http://vimcasts.org/episodes/archive/)
 
 
 # Plugins
+
+these are all plugins i've installed for couple weeks of using vim:
 
 - [**Vundle**](https://github.com/VundleVim/Vundle.vim 'see docs')
     - to install added plugins - `:PluginInstall`
@@ -37,8 +41,8 @@ _CR_ = `enter` (`:help key-notation`)
 
 # Advanced movement and visual selecting
 
-`v` - select text - enter command mode (`:`) (:'<,'>w) will appear - 'w {filename} - save selected text to
-file {filename}
+select text with `v` -> `:` -> `:'<,'>w` will appear -> `'w {filename}` - save selected text to file
+{filename}
 
 `ctrl+v` -> select block -> by moving with `w` or `e` you can select words, and by pressing `o` toggles cursor
 to opposite corner
@@ -111,11 +115,11 @@ vim has **35** copy buffers
 
 `:reg` -> view the contents of registers
 
-**<C-r> in INSERT mode puts user in " mode (being able to paste from any register)**
+**`C-r` in INSERT mode puts user in " mode (being able to paste from any register)**
 
 > and the thing above also works in vim command line
 
-`<C-r><C-o>` - inserts literally from current default buffer (useful when repeating with '.' command)
+`C-r C-o` - inserts literally from current default buffer (useful when repeating with '.' command)
 
 **Read-only registers**
 
@@ -133,20 +137,12 @@ vim has **35** copy buffers
 
 "= - expression register
 
-> [useful demo how to use it](http://vimcasts.org/episodes/simple-calculations-with-vims-expression-register/)
-
-[evaluating scripts with vim's expression register](http://vimcasts.org/episodes/evaluating-scripts-with-vims-expression-register/)
+> [how to use it](http://vimcasts.org/episodes/simple-calculations-with-vims-expression-register/)
 
 _Example_:
-	In 'INSTERT' mode `ctrl+r + =` and there some mathematical expression + `Enter`
-	will paste the result of this expression
 
----
-
-`:global/{pattern}/{command} A - :global/TODO/yank A - will yank all
-lines containing 'TODO' word into reg. A
-
-:set paste - enable paste mode (useful when pasting from system clipboard)
+`C-r =` in insert mode, put there some mathematical expression -> `CR` will paste the result of this
+expression
 
 
 # Searching / replacing
@@ -330,6 +326,20 @@ two times '=' -> properly indent
 `$ vim -S ~/mysession.vim` - or open vim with the -S option:
 
 
+# Global | [docs](http://vimdoc.sourceforge.net/htmldoc/repeat.html#:g)
+
+`:[range]g[lobal]/{pattern}/[cmd]` - Execute the Ex command [cmd] (default ":p") on the lines within [range]
+where {pattern} matches.
+
+`:[range]g[lobal]!/{pattern}/[cmd]` - opposite as above
+
+`:[range]v[global]/{pattern}/[cmd]` - Same as :g!
+
+_example_:
+
+`:global/TODO/yank A` - yank all lines containing 'TODO' word into reg. A
+
+
 # Additional info
 
 `CTRL-G` - show your location in the file and the file status.
@@ -337,10 +347,14 @@ two times '=' -> properly indent
 `g?` - rotates selected text by 13 characters (bu, h npghnyyl gevrq vg..)
 `set showbreak=_` - make long lines more readable
 
-don't use f'lvt'U instead of **gUit** (???) // wut?
+don't use `f'lvt'U` instead of `gUit` // wut?
 
 `qall` - quit all files
 
 **compare two files / buffers**:
 
 [using vimdiff / diffthis](http://vimcasts.org/episodes/comparing-buffers-with-vimdiff/)
+
+---
+
+`:set paste` - enable paste mode (useful when pasting from system clipboard)
