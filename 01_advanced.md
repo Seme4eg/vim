@@ -1,4 +1,16 @@
+# Sources
+
+> When you are browsing Vim’s documentation, you can follow the link
+> under the cursor with the command: `ctrl-]`
+
+Now go [here](http://derekwyatt.org/vim/tutorials/index.html) and go through all tutors from top to bottom,
+
+And as additional info watch some [vimcasts](http://vimcasts.org/episodes/archive/)
+
+
 # .vimrc setup
+
+`:help usr_05.txt`
 
 basic .vimrc setup taken from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
 
@@ -11,18 +23,6 @@ With a map leader it's possible to do extra key combinations
 _CR_ = `enter` (`:help key-notation`)
 
 `:source $MYVIMRC` - applyes changes to _.vimrc_ without reloading vim
-
-
-# Sources
-
-> When you are browsing Vim’s documentation, you can follow the link
-> under the cursor with the command: `ctrl-]`
-
-First of all complete free levels of [this game](https://vim-adventures.com)
-
-Then go [here](http://derekwyatt.org/vim/tutorials/index.html) and go through all tutors from top to bottom,
-
-And as additional info watch some [vimcasts](http://vimcasts.org/episodes/archive/)
 
 
 # Plugins
@@ -39,47 +39,95 @@ these are all plugins i've installed for couple weeks of using vim:
 - [syntastic](https://github.com/vim-syntastic/syntastic)
 
 
-# Advanced movement and visual selecting
 
-select text with `v` -> `:` -> `:'<,'>w` will appear -> `'w {filename}` - save selected text to file
-{filename}
+# some clippings from 'user-manual'
 
-`ctrl+v` -> select block -> by moving with `w` or `e` you can select words, and by pressing `o` toggles cursor
-to opposite corner
+## moving around (usr_03.txt)
 
-**vertical movement:**
+### line travelling (03.5)
 
-`{number}|` - move to a certain column
+- `H/M/L` - move cursor to top/middle/bottom of current lines
 
-`zL/zH` - move the view on the text half a screenwidth to the right/left
+### scrolling around (03.7)
 
-`g[hjkl]` - goes thrue the **visual** lines (only if line wrapping is on)
-
-`ctrl+( or )` -> move to the beginning / end of sentence
-
-`ctrl+{ or }` -> move to the beginning / end of paragraphs
-
-> More: see :h motion.txt
+- `zt/zz/zb` - redraw, cursor line at top/center/bottom accordingly
 
 
-# Extending ':' knowledge
+### simple searches (03.8) + substitute command
 
-**all commands below are supposed to be used in `:` mode**
+`:set {options}` - set options for search
 
-`! {bash_command}` - run external command
+**ignoring case**:
+- 'ic' (ignorecase)	- ignore upper/lower case when searching
+- 'nic' (noignorecase)	- ignore upper/lower case when searching
 
-`r {filename/bash_command}` - puts {filename} content / {command} output below the cursor
+**highlight search**:
+- 'hls' (hlsearch) - highlight all matching phrases
+- 'nhls' (nohlsearch) - disable highlight of all matching phrases
 
-`CTRL-D` - see possible completions
+`:nohl` -> to disable highlighting of search instances -
 
-`!sort` - sorts selected lines
+**tuning search**:
+- 'is' (incsearch) - show partial matches for a search phrase
+- 'nowrapscan' - stops search at the end/start of file. (on by default)
 
-`e[dit]` called with no arguments will revert to the latest saved version of the current file. To discard
-unwanted changes - add '!' | `:e!`
+**substitute command:**
+- `:s/old/new/g` - substitute 'new' for 'old' on current **line**
+- `:%s/old/new/g` - to change every occurrence in the **whole file**
+- `:%s/old/new/gc` - find every occurrence in the whole file, with a prompt whether to substitute or not.
 
-`earlier 2m` - vim will go to the file 2 minutes ago
+change every occurrence of a character string between two lines:
 
-`@:` - repeat last command-line [count] times (useful with switching buffers)
+`:#,#s/old/new/g` - #,# are the line numbers of the range of lines where the substitution is to be done.
+
+**operating on search matches using 'gn'**:
+
+`gn` - Search forward for the last used search pattern, like with n, and start Visual mode to select the
+match. If the cursor is on the match, visually selects it. If an operator is pending, operates on the
+match. (_`cgn` - del next occurance of the match and enter insert mode_)
+
+> `gUgn` - upcase next search match
+
+
+### using marks (3.10) + change/jump-list
+
+\`\` / `''` - jump to your previous position (will jump back if u use it again) (not same as `C-o`, but similar)
+
+**jumplist** - remembering each position to which the cursor jumped, rather than scrolled
+
+`C-o` / `C-i` - move backward / forward through the jumplist
+
+`:jumps` - view the contents of the jumplist. Entry which u used last is marked as `>`
+
+#### named marks
+
+`m + {mark}` - mark some place in file with specified letter, to find it faster
+
+`' + {mark}` - go to the marked with this letter
+
+special marks (`:marks`):
+- `'` - cursor position before doin a jump
+- `"` - cursor position when last edigin file
+- `[` / `]` - start / eng or the last change
+
+**changelist** - remembers the position of every change that can be undone. You can move back and forwards
+through the changelist using the commands:
+
+`g;` / `g,`
+
+> last one is kinda meh, cuz ',' is better as leader, so if u have it it won't work for ya
+
+`:changes` - view the contents of the changelist
+
+
+## making small changes (usr_04.txt)
+
+### visual mode (04.4)
+
+`ctrl+v` -> start selecting rectangular block
+
+When using blockwise selection, `o` takes u to 1 of the other corners, diagonally, `O` moves to the other
+corner in the same line.
 
 
 # Copy / paste
@@ -145,33 +193,24 @@ _Example_:
 expression
 
 
-# Searching / replacing
+# Extending ':' knowledge
 
-`:set {options}` - set options for search
+**all commands below are supposed to be used in `:` mode**
 
-- 'ic' (ignorecase)	- ignore upper/lower case when searching
-- 'is' (incsearch) - show partial matches for a search phrase
-- 'hls' (hlsearch) - highlight all matching phrases
+`! {bash_command}` - run external command
 
-**substitute command:**
+`r {filename/bash_command}` - puts {filename} content / {command} output below the cursor
 
-- `:s/old/new/g` - substitute 'new' for 'old' on current **line**
-- `:%s/old/new/g` - to change every occurrence in the **whole file**
-- `:%s/old/new/gc` - find every occurrence in the whole file, with a prompt whether to substitute or not.
+`CTRL-D` - see possible completions
 
-change every occurrence of a character string between two lines:
+`!sort` - sorts selected lines
 
-`:#,#s/old/new/g` - #,# are the line numbers of the range of lines where the substitution is to be done.
+`e[dit]` called with no arguments will revert to the latest saved version of the current file. To discard
+unwanted changes - add '!' | `:e!`
 
-`:nohl` -> to disable highlighting of search instances -
+`earlier 2m` - vim will go to the file 2 minutes ago
 
-**operating on search matches using 'gn'**:
-
-`gn` - Search forward for the last used search pattern, like with n, and start Visual mode to select the
-match. If the cursor is on the match, visually selects it. If an operator is pending, operates on the
-match. (_`cgn` - del next occurance of the match and enter insert mode_)
-
-> `gUgn` - upcase next search match
+`@:` - repeat last command-line [count] times (useful with switching buffers)
 
 
 # Navigation
@@ -220,22 +259,21 @@ jump between current and prev buffer (in VIM - `C-^`)
 `:bd!` - forsibly remove buffer from buffer list
 
 
-# Changelist & Jumplist
+# Advanced movement
 
-**changelist** - remembers the position of every change that can be undone. You can move back and forwards
-through the changelist using the commands:
+**vertical movement:**
 
-`g;` / `g,`
+`{number}|` - move to a certain column
 
-> last one is kinda meh, cuz ',' is better as leader, so if u have it it won't work for ya
+`zL/zH` - move the view on the text half a screenwidth to the right/left
 
-`:changes` - view the contents of the changelist
+`g[hjkl]` - goes thrue the **visual** lines (only if line wrapping is on)
 
-**jumplist** - remembering each position to which the cursor jumped, rather than scrolled
+`ctrl+( or )` -> move to the beginning / end of sentence
 
-`ctrl-O` / `ctrl-I` - move backwards and forwards through the jumplist
+`ctrl+{ or }` -> move to the beginning / end of paragraphs
 
-`:jumps` - view the contents of the jumplist
+> More: see :h motion.txt
 
 
 # Hard wrapping text
@@ -249,17 +287,6 @@ how hard wrapping behaves depends on _textwidth_ and _wrapmargin_ values, see mo
 [here](http://vimcasts.org/episodes/hard-wrapping-text/)
 
 `:set fo[rmatoptions]+=ta`
-
-
-# Marking
-
-`m + {marking letter}` - mark some place in file with specified letter, to find it faster
-
-`' + {marking letter}` - go to the marked with this letter
-
-after editing anything in VIM, it marks first and last point of edited text with `[` and `]` marks
-respectively, so if you cut some paragraph, you can jump then to the beginning of changed place in the file by
-`'[`
 
 
 # Keeping Coding Syntax
@@ -358,3 +385,6 @@ don't use `f'lvt'U` instead of `gUit` // wut?
 ---
 
 `:set paste` - enable paste mode (useful when pasting from system clipboard)
+
+select text with `v` -> `:` -> `:'<,'>w` will appear -> `'w {filename}` - save selected text to file
+{filename}

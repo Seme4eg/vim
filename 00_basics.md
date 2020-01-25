@@ -1,10 +1,18 @@
-hjkl, dear neophytes
+hjkl, dear neophyte, now go [here](https://vim-adventures.com) and come back to this repo after u done at
+least all free levels of this game
 
-`:help {argument}`:
-- `:help w`
-- `:help CTRL-D`
-- `:help insert-index`
-- `:help user-manual`
+now type `:help user-manual` and check how much u actually know now, reading it from top to bottom, stop
+when/if u r completely lost
+
+done already? ok, if u still don't feel yourself confident when using vim, read my notes below..
+
+
+# vim built-in documentation
+
+`:help usr_02.txt` --> 02.8 Finding help (or just `:help 02.8`)
+
+or `:help helphelp`
+
 
 # WORD vs word
 
@@ -16,6 +24,7 @@ characters, separated with white space (spaces, tabs, <EOL>). An empty line is a
 
 - `w` - move to the beginning of next word | `3w`
 - `e` - move to the end of cur. word | `3e`
+- `ge` - move to the end of prev. word | `3e`
 - `b` - move to the beginning of prev. word | `3b`
 
 > big letters are doing the same but with WORDs
@@ -24,14 +33,16 @@ characters, separated with white space (spaces, tabs, <EOL>). An empty line is a
 # Basic operations
 
 `r{char}` - replace the character | `6rX`
+`R` - enter replace mode
 
-`x` - delete [count] chars under and **after** the cursor
+`d{motion}` - delete text {motion} | _dw, db, diw, das, d71, dj (delete this line + line below)_
 
-`X` - delete [count] chars **before** ..
-
-`d{motion}` - delete text {motion} | _dw, db, d71, dj (delete this line + line below)_
-
-`D` - deletes until the end of the line, synonym for 'd$' | `3D`
+- `x` (chortcut for `dl`) - delete [count] chars **under** and **after** the cursor
+- `X` (chortcut for `dh`) - delete [count] chars **before** the cursor
+- `D` (chortcut for `d$`) - delete to the end of the line
+- `C` (chortcut for `c$`) - change to the end of the line
+- `s` (chortcut for `cl`) - change one char
+- `S` (chortcut for `cc`) - change a whole line
 
 `u` - undo last change(s)
 
@@ -106,8 +117,9 @@ the object type and is one of the following:
 # Inserting
 
 `i/a` - insert text before/after the cursor | `3isometext{esc}`
+`i/a` - start inserting at the beginning/eng of the line
 
-`o` - begin a new line below the cursor and insert text, repeat [count] times.
+`o` / `O` - begin a new line below/above the cursor and insert text, repeat [count] times.
 
 
 # Regs and yanking (copying) / deleting / cutting
@@ -129,8 +141,6 @@ the object type and is one of the following:
 
 
 # Other
-
-- `zt/zz/zb` - redraw, cursor line at top/center/bottom accordingly
 
 > `=i{` - indent text within the scope (or `vi{` ..)
 
