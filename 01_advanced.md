@@ -8,38 +8,6 @@ Now go [here](http://derekwyatt.org/vim/tutorials/index.html) and go through all
 And as additional info watch some [vimcasts](http://vimcasts.org/episodes/archive/)
 
 
-# .vimrc setup
-
-`:help usr_05.txt`
-
-basic .vimrc setup taken from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
-
-_leader_ is changed it to `,` (`/` - def.)
-
-With a map leader it's possible to do extra key combinations
-
-> like `,w` with this config saves the current file
-
-_CR_ = `enter` (`:help key-notation`)
-
-`:source $MYVIMRC` - applyes changes to _.vimrc_ without reloading vim
-
-
-# Plugins
-
-these are all plugins i've installed for couple weeks of using vim:
-
-- [**Vundle**](https://github.com/VundleVim/Vundle.vim 'see docs')
-    - to install added plugins - `:PluginInstall`
-    - to update installed pluigns - `:PluginUpdate`
-    - [usage docs](https://github.com/VundleVim/Vundle.vim/blob/v0.10.2/doc/vundle.txt#L234-L254)
-- [Nerdtree](https://github.com/scrooloose/nerdtree)
-- [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
-- [fugitive](https://github.com/tpope/vim-fugitive)
-- [syntastic](https://github.com/vim-syntastic/syntastic)
-
-
-
 # some clippings from 'user-manual'
 
 ## moving around (usr_03.txt)
@@ -53,7 +21,7 @@ these are all plugins i've installed for couple weeks of using vim:
 - `zt/zz/zb` - redraw, cursor line at top/center/bottom accordingly
 
 
-### simple searches (03.8) + substitute command
+### simple searches (03.8)
 
 `:set {options}` - set options for search
 
@@ -70,23 +38,6 @@ these are all plugins i've installed for couple weeks of using vim:
 **tuning search**:
 - 'is' (incsearch) - show partial matches for a search phrase
 - 'nowrapscan' - stops search at the end/start of file. (on by default)
-
-**substitute command:**
-- `:s/old/new/g` - substitute 'new' for 'old' on current **line**
-- `:%s/old/new/g` - to change every occurrence in the **whole file**
-- `:%s/old/new/gc` - find every occurrence in the whole file, with a prompt whether to substitute or not.
-
-change every occurrence of a character string between two lines:
-
-`:#,#s/old/new/g` - #,# are the line numbers of the range of lines where the substitution is to be done.
-
-**operating on search matches using 'gn'**:
-
-`gn` - Search forward for the last used search pattern, like with n, and start Visual mode to select the
-match. If the cursor is on the match, visually selects it. If an operator is pending, operates on the
-match. (_`cgn` - del next occurance of the match and enter insert mode_)
-
-> `gUgn` - upcase next search match
 
 
 ### using marks (3.10) + change/jump-list
@@ -130,22 +81,256 @@ When using blockwise selection, `o` takes u to 1 of the other corners, diagonall
 corner in the same line.
 
 
+## set your settings (usr_05.txt)
+
+basic .vimrc setup taken and modified from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+
+_leader_ is changed it to `,` (`/` - def.)
+
+> `:map` will list u all current mappings
+
+With a map leader it's possible to do extra key combinations
+
+> like `,w` with this config saves the current file
+
+`CR` (carriage return) = `enter` (`:help key-notation`)
+
+`:source $MYVIMRC` - applyes changes to _.vimrc_ without reloading vim
+
+
+### adding a plugin (05.6)
+
+these are all plugins i've installed for couple weeks of using vim:
+
+- [**Vundle**](https://github.com/VundleVim/Vundle.vim 'see docs')
+    - to install added plugins - `:PluginInstall`
+    - to update installed pluigns - `:PluginUpdate`
+    - [usage docs](https://github.com/VundleVim/Vundle.vim/blob/v0.10.2/doc/vundle.txt#L234-L254)
+- [Nerdtree](https://github.com/scrooloose/nerdtree)
+- [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
+- [fugitive](https://github.com/tpope/vim-fugitive)
+- [syntastic](https://github.com/vim-syntastic/syntastic)
+
+
+
+## splitting windows + tabs (usr_08.txt)
+
+http://vimcasts.org/episodes/working-with-windows/
+
+`C-w s` (`:sp[lit] [file]`) - horizontal split
+
+`C-w v` (`:vs[plit] [file]`) - vertical split
+
+`C-w c` (`:close`) - close window
+
+`C-w o` (`:only`) - focus window (make cur. window the only visible)
+
+`C-w hjkl` - switch between windows
+
+`C-w H|J|K|L` - move (swap) windows (08.5)
+
+`C-w >/<` - increase/decrease width (ex. 30<C-w><)
+
+`C-w =` - equalize width and height of all windows
+
+`{height}C-w _` - set window height to a apecified number of lines
+
+**Commands for all windows (08.6):**
+- `[q|w|qw]all[!]` - close/save/save'n'close all windows and quit vim
+- `vim -[o|O] one.txt two.txt` - open vim with a window splitted horizontally/vertically for each arg
+
+
+### viewing differences with vimdiff (08.7)
+
+`vimdiff main.c~ main.c`
+
+`vertical diff[split|patch] [[file|patch]name]` - open vertical diffsplit
+
+> `vertical diffpatch main.c.diff` - open vertical diffwindow with patch file
+
+`[c` \ `]c` - jump between changes (if u've disabled changes)
+
+`dp` / `do` (diff put/obtain) - remove difference (use from left/right windows)
+
+[using vimdiff / diffthis](http://vimcasts.org/episodes/comparing-buffers-with-vimdiff/)
+
+> See also: :help CTRL-W & :help vimdiff
+
+
+### tab pages (08.9)
+
+http://vimcasts.org/episodes/working-with-tabs/
+
+`:tabedit {filename}` - create new tab page with given file
+
+`gt` / `gT` - go to next/prev tab
+
+`:tab split` - creates new tab with current file
+
+`:tabnew` -> creates a new tab (inside new tab is buffer, so it's possible to open a new file in it - :e
+  filename
+
+`:tabonly` - close all tabs except current one
+
+`:tabp` -> 'tab previous' - go to the previous tab
+
+`:tabn` -> 'tab next' - go to the next tab
+
+
+## making big changes (usr_10.txt)
+
+### record and playback commands (10.1)
+
+`q{register}` - start writing macros into given register
+`[count]@{register}` - use macros from given register
+
+**editing macros (instead of recording again):**
+- `"{register}p` - paste macros
+- change commands that were wrong
+- yank the corrected commands back into register and use again
+
+
+### substitution (10.2)
+
+`:[range]s/old/new/[flags]` - substitute 'new' for 'old'
+
+- `%` before `:s` command specifies the command works on all lines (but only 1st occurance on each line)
+- `g` flag - change every occurance on **line**
+- `p` flag - print out last line it changed
+- `c` flag - ask confirmation before each substitution
+- `e` flag - tells 'substitute' command that not finding a match is not an error
+  - y/n/a - yes/no/all
+  - q - quit, don't make any more changes
+  - l - last, make this change and then quit
+
+> if u r substituting string with slash in it use this syntax: `:%s+old/slash+newNoSlash` (slashes are
+> replaced with plus)
+
+`:%s/\(1st regex\), \(2nd regex\)/\2 \1/` - swaps matches for 1st and 2nd regexps (`\2` and `\1` are
+backreferences (pockets))
+
+
+### command ranges (10.3)
+
+`:#,#s/old/new/g` - #,# are line numbers to which any ':' command can be applyed (single number can be used
+to address 1 specific line)
+
+`.` / `$` - is the shortcut for current/last line address
+
+**line duplication (sample)**
+
+`:{range/line_number}y[ank]` - yanks given line without moving the cursor
+
+`:{range/line_number}copy{address}` - copy line(s) and paste to given (address) line
+
+> command 'copy' has shortcut - `t` | _9t._, _.t$_
+
+**using a pattern in a {range}:**
+
+`:?^Chapter?,/^Chapter/s=grey=gray=g` - first `?^Chapter?` finds line above cur. position, that matches, next
+`/^Chapter/` finds line below cur. position, adds 2 more lines and replaces 'grey' for 'gray' between those
+lines
+
+**adding count manually:**
+
+`:.+3,$-5s/old/new/g` - substract from current line + 3 lines to last line - 5 lines
+
+_Example:_ `.,.+4..` - when u know how many lines to operate on..
+
+**using marks:**
+
+`:'t,'b..` - substract between those marks
+
+> right here in this tutorial, instead of words 'Example' above and below i had words 'Sample', so i decided
+> to practice a bit and replaced it with command: `?Sample?-1,/Sample/+1s=sample=Example`, which worked
+> perfectly, feel like VIM-superman ^^
+
+**visual modes and ranges:**
+
+select text --> press ':' --> `:'<,'>` will appear ('< and '> are marks, placed at the start and end of the
+visual selection) --> any ':' command will be now applyed to this selected text
+
+_Example:_
+
+select text -> `:` -> `:'<,'>w {filename}` - save selected text to file
+{filename}
+
+
+### the global command (10.4)
+
+[docs](http://vimdoc.sourceforge.net/htmldoc/repeat.html#:g)
+
+**global** is similar to 'substitute', but instead of replacing the matched text, {command} is executed
+
+`:[range]g[lobal]/{pattern}/{command}` - Execute {command} (default ":p") on the lines within [range] where
+{pattern} matches.
+
+`:[range]g[lobal]!/{pattern}/[cmd]` - opposite as above
+
+`:[range]v[global]/{pattern}/[cmd]` - Same as :g!
+
+_Examples:_
+
+`:g+//+s/foobar/barfoo/g` - replace foobar on barfoo in all C++ style comments (search string is wrapped in
+'+' instead of '/' cuz it itself contains '/'
+
+`:g/TODO/yank A` - yank all lines containing 'TODO' word into reg. A
+
+`:4,6g/^/m 't` - move text between lines 4 and 6 to mark 't'
+
+
+### reading and writing part of a file (10.6)
+
+`:[range]r[ead] {filename}` - paste {filename} contents in current file in [range] | _:$r patch_ - put 'patch'
+file contents at the end of cur. file
+
+`:[range]w[rite] {filename}` - write a **[range]** of lines from cur. file into {filename}; use `w!` to
+override existing files; use `w >>{filename}` to append to a file
+
+
+### formatting text (10.7)
+
+`:set textwidth=100` - make lines automatically trim when typing at 100 symbols
+
+`gq{motion}` - format a section of text (ie `gqip` applies formatting to the current paragraph). And after
+formatting cursor will be on the last line of the paragraph
+
+`gw{motion}` - same, but the cursor will remain on the word it was on
+
+how hard wrapping behaves depends on _textwidth_ and _wrapmargin_ values, see more about them
+[here](http://vimcasts.org/episodes/hard-wrapping-text/)
+
+`:set fo[rmatoptions]+=ta`
+
+
+### changing case (10.8)
+
+`g{action}{motion}` - perform {action} in {motion} (ik, ima pro at explaining ^^)
+
+To make operator work on lines - double it. ('gUgU' == 'gUU')
+
+_Examples_:
+
+- `gUw` - uppercase next word
+- `gUU` (shortcut from 'gUgU') - uppercase whole line
+- `g~gn` - switch case on next search match
+
+
+## clever tricks (usr_12.txt)
+
+### replace a word (12.1)
+
+`:%s/\<four\>/4/g` - replace ' four ' to 4 filewide (not 'thirtyfour' or 'fourteen'), where `\<` means 'match
+the beginning of word and `/>` end of word
+
+
+### find a man page (12.6)
+
+`K` - find the man page for word/func below the cursor
+
+for more info look '12.6' section
+
 # Copy / paste
-
-## Yanking
-
-**line duplication**:
-
-`:{column_number}y[ank]` - yanks given line without moving the cursor
-
-`:{yank_line_number}copy{paste_line_number}` - copy from line 9 after line 16
-
-> command 'copy' has shortcut - `t`, so the command can be written: `9t16` for example
-
-`.` - shortcut for number of line cursor is positioned at atm
-
-so the example above can be reduced to `9t.`, which is `:[range]copy {address}`
-
 
 ## Registers
 
@@ -215,41 +400,6 @@ unwanted changes - add '!' | `:e!`
 
 # Navigation
 
-## Windows
-
-http://vimcasts.org/episodes/working-with-windows/
-
-`C-w s` | :sp[lit] - horizontal split
-
-`C-w v` | :vs[plit] - vertical split
-
-`C-w c` | :close - close window
-
-`C-w hjkl` - switch between windows
-
-`C-w HJKL` - reposition windows
-
-`C-w o` - focus window (make cur. window the only visible)
-
-`Ctrl+W >/<` : increase/decrease width (ex. 30<C-w><)
-
-`Ctrl+W =` : equalize width and height of all windows
-
-> See also: :help CTRL-W
-
-
-## Tabs
-
-http://vimcasts.org/episodes/working-with-tabs/
-
-`:tabnew` -> creates a new tab (inside new tab is buffer, so it's possible to open a new file in it - :e
-  filename
-
-`:tabp` -> 'tab previous' - go to the previous tab
-
-`:tabn` -> 'tab next' - go to the next tab
-
-
 ## Buffers
 
 `:bp/:bn` - next/prev buffer
@@ -274,19 +424,6 @@ jump between current and prev buffer (in VIM - `C-^`)
 `ctrl+{ or }` -> move to the beginning / end of paragraphs
 
 > More: see :h motion.txt
-
-
-# Hard wrapping text
-
-`gq{motion}` - format a section of text (ie `gqip` applies formatting to the current paragraph). And after
-formatting cursor will be on the last line of the paragraph
-
-`gw{motion}` - same, but the cursor will remain on the word it was on
-
-how hard wrapping behaves depends on _textwidth_ and _wrapmargin_ values, see more about them
-[here](http://vimcasts.org/episodes/hard-wrapping-text/)
-
-`:set fo[rmatoptions]+=ta`
 
 
 # Keeping Coding Syntax
@@ -353,20 +490,6 @@ two times '=' -> properly indent
 `$ vim -S ~/mysession.vim` - or open vim with the -S option:
 
 
-# Global | [docs](http://vimdoc.sourceforge.net/htmldoc/repeat.html#:g)
-
-`:[range]g[lobal]/{pattern}/[cmd]` - Execute the Ex command [cmd] (default ":p") on the lines within [range]
-where {pattern} matches.
-
-`:[range]g[lobal]!/{pattern}/[cmd]` - opposite as above
-
-`:[range]v[global]/{pattern}/[cmd]` - Same as :g!
-
-_example_:
-
-`:global/TODO/yank A` - yank all lines containing 'TODO' word into reg. A
-
-
 # Additional info
 
 `CTRL-G` - show your location in the file and the file status.
@@ -374,17 +497,20 @@ _example_:
 `g?` - rotates selected text by 13 characters (bu, h npghnyyl gevrq vg..)
 `set showbreak=_` - make long lines more readable
 
-don't use `f'lvt'U` instead of `gUit` // wut?
+`:help usr_11.txt` - **recovering from a crash**
 
-`qall` - quit all files
+**operating on search matches using 'gn'**:
 
-**compare two files / buffers**:
+`gn` - Search forward for the last used search pattern, like with n, and start Visual mode to select the
+match. If the cursor is on the match, visually selects it. If an operator is pending, operates on the
+match. (_`cgn` - del next occurance of the match and enter insert mode_)
 
-[using vimdiff / diffthis](http://vimcasts.org/episodes/comparing-buffers-with-vimdiff/)
+`C-^` - go to alternate (prev) file
 
----
+`C-w C-^` - split window horizontally and go to alternate file
 
 `:set paste` - enable paste mode (useful when pasting from system clipboard)
 
-select text with `v` -> `:` -> `:'<,'>w` will appear -> `'w {filename}` - save selected text to file
-{filename}
+`C-l` - redraw screen (in case some usage of external command produced an error message and messed up screen)
+
+`g C-g` - vim will count words in current files and display it
