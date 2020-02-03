@@ -59,6 +59,10 @@ characters, separated with white space (spaces, tabs, <EOL>). An empty line is a
 
 `^` - go to the first non-blank charater of the line.
 
+`H/M/L` - move cursor to top/middle/bottom of current lines
+
+`zt/zz/zb` - redraw, cursor line at top/center/bottom accordingly
+
 
 # Searching
 
