@@ -1,58 +1,75 @@
-set nocompatible              " be iMproved, required
+" ------------------ defaults (:help 05.3) ------------------
+
+set nocompatible
+set backspace=eol,start,indent
+set history=200
+set ruler
+set wildmenu
+
+set incsearch
+set ignorecase
+set smartcase
+set hlsearch
+
+syntax enable
+set nolangremap
+set so=7 " Set 7 lines to the cursor - when moving vertically using j/k
+
 filetype off                  " required
 
-" === Vundle ===
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" ------------------ plugins ------------------
 
-Plugin 'VundleVim/Vundle.vim'
+" --- https://github.com/VundleVim/Vundle.vim ---
 
-Plugin 'https://github.com/scrooloose/nerdtree.git'
-Plugin 'https://github.com/tpope/vim-fugitive.git'
+set rtp+=~/.vim/bundle/Vundle.vim " set the runtime path to include Vundle and initialize
+call vundle#begin() "call vundle#begin('~/some/path/here')
+
+Plugin 'VundleVim/Vundle.vim' "required
+
+" to install added plugins -- `:PluginInstall`
+" to update installed pluigns -- `:PluginUpdate`
+" [link](https://github.com/VundleVim/Vundle.vim/blob/v0.10.2/doc/vundle.txt#L234-L254)
+Plugin 'https://github.com/scrooloose/nerdtree.git' " nerdtree
+Plugin 'https://github.com/tpope/vim-fugitive.git' " git wrapper
 Plugin 'mhartington/oceanic-next' " vim theme
 
-call vundle#end()
+call vundle#end()            " required | all plugins must be added before the this line
 filetype plugin indent on
 
-" === end plugins ===
+" ------------------ end plugins -----------------
 
 
-" === General ===
 
-set history=500 " Sets how many lines of history VIM has to remember
 
-filetype plugin on
-filetype indent on
+" some basic .vimrc setup taken from
+" https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+
+" ------------------ General ------------------
 
 set number " set vim to show numbers at startup
-set hidden " ability to have edited buffers that aren't visible in a window somewhere
+" ability to have edited buffers that aren't visible in a window somewhere
+set hidden
 set autoread " Set to auto read when a file is changed from the outside
 
-
-" === Leader shortcuts ===
-
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
 let mapleader = ","
 
+" Fast saving
 nmap <leader>w :w!<cr>
-map <silent> <leader><cr> :noh<cr> " Disable highlight
-map <leader>ss :setlocal spell!<cr> " toggle and untoggle spell checking
-map <leader>sn ]s
-map <leader>sp [s
-map <leader>sa zg
-map <leader>s? z=
-
-
 map :burn :call delete(expand('%')) | bdelete!
+
 " :W sudo saves the file (useful for handling the permission-denied error)
 command W w !sudo tee % > /dev/null
 
+" This adds the ":DiffOrig" command.  Use this in a modified buffer to see the
+" differences with the file it was loaded from.  See |diff|.
+command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+            \ | wincmd p | diffthis
 
 
 " -----------------  VIM user interface -----------------
-
-set so=7 " Set 7 lines to the cursor - when moving vertically using j/k
-set wildmenu " Turn on the Wild menu
 
 if (exists('+colorcolumn'))
     set colorcolumn=80
@@ -67,23 +84,13 @@ else
     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
 
-set ruler "Always show current position
 set cmdheight=2 " Height of the command bar
 set hid " A buffer becomes hidden when it is abandoned
 
-" Configure backspace so it acts as it should act
-set backspace=eol,start,indent
-set whichwrap+=<,>,h,l
-
-set ignorecase " Ignore case when searching
-set smartcase " When searching try to be smart about cases 
-set hlsearch " Highlight search results
-set incsearch " Makes search act like search in modern browsers
-
 " Don't redraw while executing macros (good performance config)
-set lazyredraw 
+set lazyredraw
 
-set magic " For regular expressions turn magic on | ???
+set magic " For regular expressions turn magic on 					???
 set showmatch " Show matching brackets when text indicator is over them
 set mat=2 " How many tenths of a second to blink when matching brackets
 
@@ -106,11 +113,12 @@ map <leader>n :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " ------ netrw file browser setup ------
-
 " let g:netrw_liststyle = 3
 " let g:netrw_banner = 0
 " let g:netrw_winsize = 15
 " let g:netrw_preview = 2
+
+" help 05.2 (end)
 " augroup ProjectDrawer
 "   autocmd!
 "   autocmd VimEnter * :Lexplore
@@ -119,8 +127,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 " ---------------- Colors and Fonts ----------------
 
-syntax enable
-
+"theme
 if (has("termguicolors"))
     set termguicolors
 endif
@@ -140,12 +147,16 @@ if has("gui_running")
     set guitablabel=%M\ %t
 endif
 
-" ---
-
+" Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
-set ffs=unix,dos,mac " Use Unix as the standard file type
 
-" Turn backup off, since most stuff is in SVN, git etc. anyway...
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+
+" ---------------- Files, backups and undo ----------------
+
+" Turn backup off, since most stuff is in SVN, git et.c anyway...
 set nobackup
 set nowb
 set noswapfile
@@ -160,10 +171,14 @@ set smarttab " Be smart when using tabs ;)
 set shiftwidth=4
 set tabstop=4
 
+" Linebreak on 500 characters
 set lbr
+" set tw=500
+
 set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
+set whichwrap+=<,>,h,l,[,]
 
 
 " ------------------- Visual mode related -------------------
@@ -174,7 +189,10 @@ vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
 
-" --------------- Moving around, tabs, windows and buffers  --------------
+" --------------- Moving around, tabs, windows and kuffers  --------------
+
+" Disable highlight when <leader><cr> is pressed
+map <silent> <leader><cr> :noh<cr>
 
 " Smart way to move between windows
 map <C-j> <C-W>j
@@ -182,37 +200,45 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" Close the current buffer
 map <leader>bd :Bclose<cr>
+
+" Close all the buffers
 map <leader>ba :bufdo bd<cr>
+
 map <leader>l :bnext<cr>
 map <leader>h :bprevious<cr>
 
-" tabs
+" Useful mappings for managing tabs
 map <leader>tn :tabnew<cr>
-map <leader>tl :tabs<cr> " show tabs list
+" show tabs list
+map <leader>tl :tabs<cr>
+" navigation between tabs
 map <leader>t0 :tabfirst<cr>
 map <leader>t9 :tablast<cr>
-map <leader>te :tabe " tabe is tabedit
+" tabe is tabedit, then you need to specify file you want to edit in new tab
+map <leader>te :tabe
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove 
+map <leader>tm :tabmove
 " move current tab to left/right by pressing `Alt+l|h`
 nnoremap <silent> <A-h> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 nnoremap <silent> <A-l> :execute 'silent! tabmove ' . (tabpagenr()+1)<CR>
-map <leader>t<leader> :tabnext 
-" toggle between this and the last accessed tab
+map <leader>t<leader> :tabnext
+
+" Let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
 nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
 au TabLeave * let g:lasttab = tabpagenr()
 
 " Opens a new tab with the current buffer's path
-" useful when editing files in the same directory
+" Super useful when editing files in the same directory
 map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
-" Specify the behavior when switching between buffers 
+" Specify the behavior when switching between buffers
 try
   set switchbuf=useopen,usetab,newtab
   set stal=2
@@ -223,7 +249,7 @@ endtry
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 
-" ---------------------- Status line --------------------- 
+" ---------------------- Status line ---------------------
 
 set laststatus=2 " Always show the status line
 
@@ -231,9 +257,10 @@ set laststatus=2 " Always show the status line
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 
 
-" ---------------------- Editing mappings ---------------------- 
+" ---------------------- Editing mappings ----------------------
 
-map 0 ^ " Remap VIM 0 to first non-blank character
+" Remap VIM 0 to first non-blank character
+map 0 ^
 
 " Move a line of text using ALT+[jk]
 nmap <M-j> mz:m+<cr>`z
@@ -260,15 +287,31 @@ if has("autocmd")
 end
 
 
+" --- Spell checking ---
+
+" Pressing ,ss will toggle and untoggle spell checking
+map <leader>ss :setlocal spell!<cr>
+
+" Shortcuts using <leader>
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
+
+
 " ---------------- Misc -----------------
 
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+
 " Quickly open a buffer for scribble
 map <leader>q :e ~/buffer<cr>
+
 " Quickly open a markdown buffer for scribble
 map <leader>x :e ~/buffer.md<cr>
-map <leader>pp :setlocal paste!<cr> " Toggle paste mode on and off
+
+" Toggle paste mode on and off
+map <leader>pp :setlocal paste!<cr>
 
 
 " --------------- Helper functions -------------------
