@@ -50,17 +50,19 @@ characters, separated with white space (spaces, tabs, <EOL>). An empty line is a
 
 `$` - go to the end of the line | `$`, `2$`
 
+`+/-` - go to the beginning (1st non-blank char) of next/prev line
+
 `0` - go to the first character of the line. (very first character, even space)
 
 `^` - go to the first non-blank charater of the line.
 
-`H/M/L` - move cursor to top/middle/bottom of current lines
+`[number] H/M/L` - move cursor to top/middle/bottom of current lines
 
 `zt/zz/zb` - redraw, cursor line at top/center/bottom accordingly
 
 
 # Searching
-
+  
 `f/F{char}` - find forward/backward (only on cur. string). The cursor is placed **on** {char}. | `3ft`
 
 `t/T{char}` - find forward/backward. The cursor is placed **before** {char}. | `3tt`
@@ -114,8 +116,11 @@ the object type and is one of the following:
 
 # Regs and yanking (copying) / deleting / cutting
 
-`"{register}p/P` - put the text [from the specified register] after/before the cursor [count]
-  times. Def. register is `"`, which contains the last text deleted (d,x), changed (c, s), or yanked (y).
+`"{register}p/P` - put the text [from the specified register] after/before the cursor [count] times.
+  Def. register is `"`, which contains the last text deleted (d,x), changed (c, s), or yanked (y).
+  
+> gp command works just like the p command, except that the cursor is left at the end of the new
+> text
 
 `"` - use regiester {a-zA-Z0-9.%#:-"} for next delete, yank or put (i.e. paste). Use uppercase cahracter to
   append with delete and yank.

@@ -7,11 +7,21 @@ Now go [here](http://derekwyatt.org/vim/tutorials/index.html) and go through all
 
 And as additional info watch some [vimcasts](http://vimcasts.org/episodes/archive/)
 
-sequence of sections below taken from 'user\_manual' and changed a bit, so you can access 'user\_manual' '30.1'
-for instance by typing `:help 30.1`
+sequence of sections below taken from 'user\_manual' and changed a bit, so you can access
+'user\_manual' '30.1' for instance by typing `:help 30.1`
 
 
-# simple searches (03.8)
+# simple searches (03.8) and regexp
+
+`/` also supports offset after it (`/search_query/offset`)
+
+- `/somethingu/±2` - position cursor 2 lines below match
+
+> If the offset begins with 'b[egin]/s[tart]/e[nd]' and a number, the cursor moves to the beginning
+> / end of the pattern, and then travels the “number” of characters. If the number is positive, the
+> cursor moves forward, if negative, backward.
+
+> to specify offset for reverse search use `?search?offset` syntax
 
 `:set {options}` - set options for search
 
@@ -29,6 +39,16 @@ for instance by typing `:help 30.1`
 - 'is' (incsearch) - show partial matches for a search phrase
 - 'nowrapscan' - stops search at the end/start of file. (on by default)
 
+## regular expressions
+**search commands, patterns and regexp** (usr_27.txt) (start from **27.4**)
+
+`\<` - beginning, `/>` - end of a word (`/<for/>` - searches for the _actual_ word 'for')
+
+specify a group by enclosing it in a `\(` and `\)`. The first group is assigned to \1 , the second
+\2 , and so on. 
+
+Also check 'Regular expressions reference' in vimbook-opl.pdf' (which also is in this repo) by just
+searching for this query. Quick regexp lookup.
 
 # Copy / paste
 
@@ -42,13 +62,15 @@ vim has **35** copy buffers
 - A-Z - same as (a-z) but append
   + _Example_: you copied something in 'a' register, now if you copy something in 'A' register it will apend to
     what is already copied.
-- "/ - current search pattern
-- "- - small delete
 - "_ - the black hole register (_) - deleting in this register actually **deletes**
+- "* - system clipboard register
 
 `:reg` -> view the contents of registers
 
 **`C-r` in INSERT mode puts user in " mode (being able to paste from any register)**
+
+- `C-r C-o reg `- insert from a register *without* autoindent
+- `C-r C-p reg` - insert from a register with Vim doing 'the right thing'
 
 > and the thing above also works in vim command line
 
@@ -56,9 +78,11 @@ vim has **35** copy buffers
 
 **Read-only registers**
 
-- ": - last :command
+- "- - small delete
 - ". - last inserted text
 - "% - filename of the current buffer
+- "/ - current search pattern
+- ": - last :command
 - "# - filename of the alternate file
 
 > :h registers
@@ -88,7 +112,7 @@ expression
 
 special marks (`:marks`):
 - `'` - cursor position before doin a jump
-- `"` - cursor position when last edigin file
+- `"` - cursor position when last editin file
 - `[` / `]` - start / eng or the last change
 
 **jumplist** - remembering each position to which the cursor jumped, rather than scrolled
@@ -143,8 +167,8 @@ these are all plugins i've installed for couple weeks of using vim:
 
 http://vimcasts.org/episodes/working-with-windows/
 
-- `C-w s` (`:sp[lit] [file]`) - horizontal split
-- `C-w v` (`:vs[plit] [file]`) - vertical split
+- `C-w s` (`:count sp[lit] [+command] [file]`) - horizontal split
+- `C-w v` (`:count vs[plit] [+command] [file]`) - vertical split
 - `C-w c` (`:close`) - close window
 - `C-w o` (`:only`) - focus window (make cur. window the only visible)
 - `C-w hjkl` - switch between windows
@@ -346,9 +370,12 @@ _Examples_:
 - `C-z` - suspend and go back to shell
 - `fg` (from shell) - go back to vim session
 
-**Executing shell commands (21.2):**
+**Executing shell commands (21.2) (pipe command):**
 - `! {bash_command}` - run external command (`!sort` - sorts selected lines)
 - or just start shell `:shell`
+
+> can be performed on a region
+> ! command always works on lines even if you are in character visual mode or visual block mode.
 
 **remembering information - viminfo (21.3)** - after u quit vim 'viminfo' contains your history, marks and
 such..
@@ -433,13 +460,17 @@ two times '=' -> properly indent
 `<` / `>` + `%` - indend / de-indent respectively code block
 
 
-### advanced movement, dealing with long lines (25.4)
+## advanced movement, dealing with long lines (25.4)
 
 **vertical movement:**
 - `zl`/`zh` - scroll left/right
 - `zL`/`zH` - scroll half a window width left/right
 - `zs`/`ze` - scroll left/right to put cursor at the start/end
 - `{number}|` - move to a certain column
+
+`C-b/u/y / d/e/f` - scroll full screen / half screen / one line UP / DOWN
+
+`C-` - scroll full screen / half screen / one line DOWN
 
 `g[hjkl]` - goes thrue the **visual** lines (only if line wrapping is on)
 
@@ -482,10 +513,7 @@ window. `vimdiff` command does this for ya
 
 # moving through programs (usr_29.txt)
 
-**using tags (29.1):**
-
-well.. if u got 'ctags' or something alike installed on your OS, `C-]` pressed on var of func name will jump
-to its definition. But still.. look it up
+`gd/D` - searches for the local/global declaration of the variable under the cursor
 
 **moving in code blocks (29.3):**
 
@@ -494,7 +522,7 @@ all commands below are meant to be done in some huge funcs, that r enclosed in {
 - `[{`/`]}` - move to the start/end of current block
   + `[(`/`])` - work similar, except they work on '()' pairs, instead of '{}'
 - `[]`/`]]` - move to the end/start of prev/next function
-- `[/`/`]/` - move to start/end of a comment block (only works for /* - */ comments)
+- `[/`/`]/` and `[* / ]*` - move to start/end of a comment block (only works for /* - */ comments)
 
 **formatting comments (30.6):** position cursor at comment start -> `gq]/`
 
@@ -515,13 +543,24 @@ all commands below are meant to be done in some huge funcs, that r enclosed in {
 
 # Additional info
 
-`CTRL-G` - show your location in the file and the file status.
+`ga` - prints the number of the character under the cursor
 
-`g?` - rotates selected text by 13 characters (bu, h npghnyyl gevrq vg..)
+`g?` - encrypt a block of text with the rot13 algorithm (rotates selected text by 13 characters)
+(bu, h npghnyyl gevrq vg..)
+
+`g??` - encrypts the current line
+
+`C-p/n` (in insert mode) - searches backward for a word to complete
 
 `set showbreak=_` - make long lines more readable
 
 `:help usr_11.txt` - **recovering from a crash**
+
+`:preserve` - This command writes all the edits to the swap file. The original file remains
+unchanged and will not be changed until you do a :write or exit with ZZ . If the
+system crashes, you can use the swap file to recover all your edits. Note that after a
+:preserve , you can recover even if the original file is lost.Without this command, you
+need both the original file and the swap file to recover.
 
 **operating on search matches using 'gn'**:
 
@@ -535,11 +574,7 @@ match. (_`cgn` - del next occurance of the match and enter insert mode_)
 
 `:set paste` - enable paste mode (useful when pasting from system clipboard)
 
-**search commands, patterns and regexp** (usr_27.txt) (start from **27.4**)
-
 `C-l` - redraw screen (in case some usage of external command produced an error message and messed up screen)
-
-`g C-g` - vim will count words in current files and display it
 
 on line '#include "inits.h"' hover over file name and press `gf` - vim will try to find this file and open it
 (22.3)
@@ -565,3 +600,26 @@ unwanted changes - add '!' | `:e!`
 - `K` - find the man page for word/func below the cursor (for more info look '12.6' section) (12.6)
 
 - . - repeat the last simple change. Does not repeat a command-line command.
+
+`$vim --help` - get all the possible flags for starting vim
+
+## encryption
+
+`$vim -x secret.md` - create encrypted file (vim will prompt you for a key used for encrypting and
+decrypting the file)
+
+`:X<RET>` - Switching Between Encrypted and Unencrypted Modes (will prompt the key)
+
+> tho the swap file that will be created while editing the file won't be encrypted, to avoid
+> creation of a swap file start vim with `-n` flag, which will store file in memory instead of swap
+> file 
+## where am i in detail
+`C-g` - show your location in the file and the file status.
+
+`1C-g` - command gives you the full path of the file
+
+`2C-g` - .. lists a buffer number as well.
+
+`g C-g` - displays the current byte number of a file (along with the current line, column, and 
+other information)
+
