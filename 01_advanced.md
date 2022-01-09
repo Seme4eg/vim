@@ -7,9 +7,8 @@ Now go [here](http://derekwyatt.org/vim/tutorials/index.html) and go through all
 
 And as additional info watch some [vimcasts](http://vimcasts.org/episodes/archive/)
 
-sequence of sections below taken from 'user\_manual' and changed a bit, so you can access
-'user\_manual' '30.1' for instance by typing `:help 30.1`
-
+sequence of sections below taken from 'user_manual' and changed a bit, so you can access
+'user_manual' '30.1' for instance by typing `:help 30.1`
 
 # simple searches (03.8) and regexp
 
@@ -26,26 +25,30 @@ sequence of sections below taken from 'user\_manual' and changed a bit, so you c
 `:set {options}` - set options for search
 
 **ignoring case**:
-- 'ic' (ignorecase)	- ignore upper/lower case when searching
-- 'nic' (noignorecase)	- ignore upper/lower case when searching
+
+- 'ic' (ignorecase) - ignore upper/lower case when searching
+- 'nic' (noignorecase) - ignore upper/lower case when searching
 
 **highlight search**:
+
 - 'hls' (hlsearch) - highlight all matching phrases
 - 'nhls' (nohlsearch) - disable highlight of all matching phrases
 
 `:nohl` -> to disable highlighting of search instances -
 
 **tuning search**:
+
 - 'is' (incsearch) - show partial matches for a search phrase
 - 'nowrapscan' - stops search at the end/start of file. (on by default)
 
 ## regular expressions
+
 **search commands, patterns and regexp** (usr_27.txt) (start from **27.4**)
 
 `\<` - beginning, `/>` - end of a word (`/<for/>` - searches for the _actual_ word 'for')
 
 specify a group by enclosing it in a `\(` and `\)`. The first group is assigned to \1 , the second
-\2 , and so on. 
+\2 , and so on.
 
 Also check 'Regular expressions reference' in vimbook-opl.pdf' (which also is in this repo) by just
 searching for this query. Quick regexp lookup.
@@ -60,16 +63,16 @@ vim has **35** copy buffers
 - 0 - the **yank** register
 - a-z - named registers
 - A-Z - same as (a-z) but append
-  + _Example_: you copied something in 'a' register, now if you copy something in 'A' register it will apend to
+  - _Example_: you copied something in 'a' register, now if you copy something in 'A' register it will apend to
     what is already copied.
 - "_ - the black hole register (_) - deleting in this register actually **deletes**
-- "* - system clipboard register
+- "\* - system clipboard register
 
 `:reg` -> view the contents of registers
 
 **`C-r` in INSERT mode puts user in " mode (being able to paste from any register)**
 
-- `C-r C-o reg `- insert from a register *without* autoindent
+- `C-r C-o reg `- insert from a register _without_ autoindent
 - `C-r C-p reg` - insert from a register with Vim doing 'the right thing'
 
 > and the thing above also works in vim command line
@@ -89,7 +92,6 @@ vim has **35** copy buffers
 
 `q{reg_name}q` - clear given register (tho don't forget bout black hole register)
 
-
 ## Expression register
 
 "= - expression register
@@ -101,7 +103,6 @@ _Example_:
 `C-r =` in insert mode, put there some mathematical expression -> `CR` will paste the result of this
 expression
 
-
 # using marks (3.10) + change/jump-list
 
 \`\` / `''` - jump to previous position (will jump back if u use it again) (not same as `C-o`, but similar)
@@ -111,18 +112,20 @@ expression
 `' + {mark}` - go to the marked with this letter
 
 special marks (`:marks`):
+
 - `'` - cursor position before doin a jump
 - `"` - cursor position when last editin file
 - `[` / `]` - start / eng or the last change
 
 **jumplist** - remembering each position to which the cursor jumped, rather than scrolled
+
 - `C-o` / `C-i` - move backward / forward through the jumplist
 - `:jumps` - view the contents of the jumplist. Entry which u used last is marked as `>`
 
 **changelist** - remembers the position of every change that can be undone.
+
 - `g;` / `g,` - move back and forwards through the changelist
 - `:changes` - view the contents of the changelist
-
 
 # visual mode (04.4)
 
@@ -132,7 +135,6 @@ special marks (`:marks`):
 
 When using blockwise selection, `o` takes u to 1 of the other corners, diagonally, `O` moves to the other
 corner in the same line.
-
 
 # set your settings (.vimrc) (usr_05.txt)
 
@@ -151,15 +153,14 @@ and autocommands
 
 these are all plugins i've installed for couple weeks of using vim:
 
-- [**Vundle**](https://github.com/VundleVim/Vundle.vim 'see docs')
-    - to install added plugins - `:PluginInstall`
-    - to update installed pluigns - `:PluginUpdate`
-    - [usage docs](https://github.com/VundleVim/Vundle.vim/blob/v0.10.2/doc/vundle.txt#L234-L254)
+- [**Vundle**](https://github.com/VundleVim/Vundle.vim "see docs")
+  - to install added plugins - `:PluginInstall`
+  - to update installed pluigns - `:PluginUpdate`
+  - [usage docs](https://github.com/VundleVim/Vundle.vim/blob/v0.10.2/doc/vundle.txt#L234-L254)
 - [Nerdtree](https://github.com/scrooloose/nerdtree)
 - [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim)
 - [fugitive](https://github.com/tpope/vim-fugitive)
 - [syntastic](https://github.com/vim-syntastic/syntastic)
-
 
 # navigation -> windows, tabs (usr_08.txt) + buffers
 
@@ -178,16 +179,15 @@ http://vimcasts.org/episodes/working-with-windows/
 - `{height}C-w _` - set window height to a apecified number of lines
 
 **Commands for all windows (08.6):**
+
 - `[q|w|qw]all[!]` - close/save/save'n'close all windows and quit vim
 - `vim -[o|O] one.txt two.txt` - open vim with a window splitted horizontally/vertically for each arg
-
 
 ## buffers
 
 - `:bp/:bn` - next/prev buffer
 - `C-^` - jump between current and prev buffer
 - `:bd!` - forsibly remove buffer from buffer list
-
 
 ## tabs (08.9)
 
@@ -200,7 +200,6 @@ http://vimcasts.org/episodes/working-with-tabs/
   filename
 - `:tabo[nly]` - close all tabs except current one
 - `:tabp[rev]`/`:tabn[ext]` -> go to the prev/next tab
-
 
 # viewing differences with vimdiff (08.7)
 
@@ -218,7 +217,6 @@ http://vimcasts.org/episodes/working-with-tabs/
 
 > See also: :help CTRL-W & :help vimdiff
 
-
 # making big changes (usr_10.txt)
 
 ## record and playback commands (10.1)
@@ -227,10 +225,10 @@ http://vimcasts.org/episodes/working-with-tabs/
 `[count]@{register}` - use macros from given register
 
 **editing macros (instead of recording again):**
+
 - `"{register}p` - paste macros
 - change commands that were wrong
 - yank the corrected commands back into register and use again
-
 
 ## substitution (10.2)
 
@@ -251,7 +249,6 @@ http://vimcasts.org/episodes/working-with-tabs/
 `:%s/\(1st regex\), \(2nd regex\)/\2 \1/` - swaps matches for 1st and 2nd regexps (`\2` and `\1` are
 backreferences (pockets))
 
-
 ## command ranges (10.3)
 
 `:#,#s/old/new/g` - #,# are line numbers to which any ':' command can be applyed (single number can be used
@@ -260,22 +257,26 @@ to address 1 specific line)
 `.` / `$` - is the shortcut for current/last line address
 
 **line duplication (sample)**
+
 - `:{range/line_number}y[ank]` - yanks given line without moving the cursor
 - `:{range/line_number}copy{address}` - copy line(s) and paste to given (address) line
 
 > command 'copy' has shortcut - `t` | _9t._, _.t$_
 
 **using a pattern in a {range}:**
+
 - `:?^Chapter?,/^Chapter/s=grey=gray=g` - first `?^Chapter?` finds line above cur. position, that matches, next
 - `/^Chapter/` finds line below cur. position, adds 2 more lines and replaces 'grey' for 'gray' between those
-lines
+  lines
 
 **adding count manually:**
+
 - `:.+3,$-5s/old/new/g` - substract from current line + 3 lines to last line - 5 lines
 
 _Example:_ `.,.+4..` - when u know how many lines to operate on..
 
 **using marks:**
+
 - `:'t,'b..` - substract between those marks
 
 > right here in this tutorial, instead of words 'Example' above and below i had words 'Sample', so i decided
@@ -291,7 +292,6 @@ _Example:_
 
 select text -> `:` -> `:'<,'>w {filename}` - save selected text to file
 {filename}
-
 
 ## the global command (10.4)
 
@@ -315,7 +315,6 @@ _Examples:_
 
 `:4,6g/^/m 't` - move text between lines 4 and 6 to mark 't'
 
-
 ## reading and writing part of a file (10.6)
 
 `:[range]r[ead] {filename}` - paste {filename} contents in current file in [range] | _:$r patch_ - put 'patch'
@@ -323,7 +322,6 @@ file contents at the end of cur. file
 
 `:[range]w[rite] {filename}` - write a **[range]** of lines from cur. file into {filename}; use `w!` to
 override existing files; use `w >>{filename}` to append to a file
-
 
 ## formatting text (10.7)
 
@@ -339,7 +337,6 @@ how hard wrapping behaves depends on _textwidth_ and _wrapmargin_ values, see mo
 
 `:set fo[rmatoptions]+=ta`
 
-
 ## changing case (10.8)
 
 `g{action}{motion}` - perform {action} in {motion} (ik, ima pro at explaining ^^)
@@ -352,25 +349,27 @@ _Examples_:
 - `gUU` (shortcut from 'gUgU') - uppercase whole line
 - `g~gn` - switch case on next search match
 
-
 # typing command-line commands quickly (usr_20.txt)
 
 **command line completion (20.3):**
+
 - `TAB` completion is contextual, rotate between suggestions with `TAB`
 - `C-d` - see list of possible completions
 - `C-l` - complete word to the longest unambiguous string
 
 **command line window (20.5):**
-- `q:` - open small command line window at the bottom of the screen, type and execute commands there
 
+- `q:` - open small command line window at the bottom of the screen, type and execute commands there
 
 # go away and come back (usr_21.txt)
 
 **suspend and resume (21.1):**
+
 - `C-z` - suspend and go back to shell
 - `fg` (from shell) - go back to vim session
 
 **Executing shell commands (21.2) (pipe command):**
+
 - `! {bash_command}` - run external command (`!sort` - sorts selected lines)
 - or just start shell `:shell`
 
@@ -387,11 +386,13 @@ such..
 
 **sessions(21.4)** contain all info 'bout what u r editing, file list, window layout, global vars, options and
 such..
+
 - `:mksession mysession.vim` (add `!` to override session with same name or if u r rewriting cur. 1)
 - `:source mysession.vim` - load this session
 - `$ vim -S mysession.vim` - open vim and restore specific session
 
 **views(21.5)** store properties for one window only, not of the whole Vim, like sessions
+
 - `mkview 1`
 - `loadview 1`
 
@@ -400,10 +401,10 @@ u can store up to 10 views for the same file, 1 unnumbered and nine numbered fro
 - `mkview ~/.vim/main.vim` - save view of cur. file
 - `source ~/.vim/main.vim` - restore it
 
-
 # inserting quickly (usr_24.txt)
 
 **making corrections (in insert mode) (24.1):**
+
 - `C-w` - same as `C-BS`
 - `C-u` - same as `C-Shift-BS`
 
@@ -412,11 +413,11 @@ also look up **completion (24.3)**
 `C-a` (in insert mode) - **insert text u typed last time u were in insert mode (24.4)**
 
 **copying from another line (24.5):**
+
 - `C-@` - does `C-a` and then exits insert mode
 - `C-y` / `C-e` - insert char above/below cursor
 
 - `C-v {char/digits}` - enter special char (like 'ESC') literally (**24.8**)
-
 
 # digraphs (24.9)
 
@@ -428,7 +429,6 @@ some chars aint on the keyboard (like copyright char ℅), so to type them use d
 
 `:digraph {sequence} {digraph}` - define your own digraph
 
-
 # editing formatted text (usr_25.txt) & keeping Coding Syntax
 
 `:{range}left/center/right [width/margin]` - accordingly align range of lines in {range} | _:1,5center 40_
@@ -439,30 +439,33 @@ selected text (or u can filter text through an external program
 **indents and tabs (25.3):**
 
 to fix messed up (like 3-spaced tabs) in cur. file:
+
 - `:set tabstop=3` -> `:retab 8`
 
 to fix indentation in file (spaces to tabs):
+
 - `:set noexpandtab`
 - `:retab!` // can be used also on visual block
 - `:set expandtab` // convert tabs back to spaces
 
-if u move to the beginning of a file and press eigher <, > or =, the effect will be applied to  whole file
+if u move to the beginning of a file and press eigher <, > or =, the effect will be applied to whole file
 
 two times '=' -> properly indent
 
 > `=i{` - indent text within the scope (or `vi{` ..)
 
 **Properly reindent the whole document**:
+
 - `gg` - go to the top of the document
 - `=` - enter to the indentation mode and await of modifier
 - `G` - go to the bottom of document
 
 `<` / `>` + `%` - indend / de-indent respectively code block
 
-
 ## advanced movement, dealing with long lines (25.4)
 
 **vertical movement:**
+
 - `zl`/`zh` - scroll left/right
 - `zL`/`zH` - scroll half a window width left/right
 - `zs`/`ze` - scroll left/right to put cursor at the start/end
@@ -480,10 +483,10 @@ two times '=' -> properly indent
 
 > More: see :h motion.txt
 
-
 # folding (usr_28.txt)
 
 **manual folding (28.2):**
+
 - `zf{motion}` - **create** manual fold | _zfap - fold a paragraph_
 - `zo` - open fold at cursor
 - `zc` - close menually created fold again (and not only manually)
@@ -497,10 +500,12 @@ two times '=' -> properly indent
 > use `:mkview` and `:loadview` to save and restore folds in file
 
 **Navigating the unfolded document**
+
 - `zj` - moves the cursor to the next fold.
 - `zk` - moves the cursor to the previous fold.
 
 **Ones that i can't get to work**
+
 - `zd` - deletes the fold at the cursor.
 - `zE` - deletes all folds.
 - `[z` - move to start of open fold.
@@ -510,7 +515,6 @@ two times '=' -> properly indent
 `:setlocal diff foldmethod=diff scrollbind nowrap foldlevel=1` - usefil when u set 'diff' option in the same
 window. `vimdiff` command does this for ya
 
-
 # moving through programs (usr_29.txt)
 
 `gd/D` - searches for the local/global declaration of the variable under the cursor
@@ -518,14 +522,14 @@ window. `vimdiff` command does this for ya
 **moving in code blocks (29.3):**
 
 all commands below are meant to be done in some huge funcs, that r enclosed in {} with lots of nested stuff:
+
 - `[[`/`][` - move to start/end of outer block
 - `[{`/`]}` - move to the start/end of current block
-  + `[(`/`])` - work similar, except they work on '()' pairs, instead of '{}'
+  - `[(`/`])` - work similar, except they work on '()' pairs, instead of '{}'
 - `[]`/`]]` - move to the end/start of prev/next function
-- `[/`/`]/` and `[* / ]*` - move to start/end of a comment block (only works for /* - */ comments)
+- `[/`/`]/` and `[* / ]*` - move to start/end of a comment block (only works for /_ - _/ comments)
 
 **formatting comments (30.6):** position cursor at comment start -> `gq]/`
-
 
 # undo tree (usr_32.txt)
 
@@ -595,6 +599,7 @@ unwanted changes - add '!' | `:e!`
 `@:` - repeat last command-line [count] times (useful with switching buffers)
 
 **clever tricks (usr_12.txt):**
+
 - `:%s/\<four\>/4/g` - replace 'four' to 4 filewide (not 'thirtyfour' or 'fourteen'), where `\<` means 'match
   the beginning of word and `/>` end of word (12.1)
 - `K` - find the man page for word/func below the cursor (for more info look '12.6' section) (12.6)
@@ -612,14 +617,15 @@ decrypting the file)
 
 > tho the swap file that will be created while editing the file won't be encrypted, to avoid
 > creation of a swap file start vim with `-n` flag, which will store file in memory instead of swap
-> file 
+> file
+
 ## where am i in detail
+
 `C-g` - show your location in the file and the file status.
 
 `1C-g` - command gives you the full path of the file
 
 `2C-g` - .. lists a buffer number as well.
 
-`g C-g` - displays the current byte number of a file (along with the current line, column, and 
+`g C-g` - displays the current byte number of a file (along with the current line, column, and
 other information)
-
