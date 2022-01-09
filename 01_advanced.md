@@ -43,15 +43,7 @@ sequence of sections below taken from 'user_manual' and changed a bit, so you ca
 
 ## regular expressions
 
-**search commands, patterns and regexp** (usr_27.txt) (start from **27.4**)
-
-`\<` - beginning, `/>` - end of a word (`/<for/>` - searches for the _actual_ word 'for')
-
-specify a group by enclosing it in a `\(` and `\)`. The first group is assigned to \1 , the second
-\2 , and so on.
-
-Also check 'Regular expressions reference' in vimbook-opl.pdf' (which also is in this repo) by just
-searching for this query. Quick regexp lookup.
+on those read 03 file in this repo
 
 # Copy / paste
 

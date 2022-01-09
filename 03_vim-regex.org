@@ -1,0 +1,316 @@
+#+TITLE: Vim regular expressions
+#+Sources: http://www.vimregex.com/
+
+* Other sources
+*Search commands, patterns and regexp* (usr_27.txt) (start from *27.4*)
+
+Check =Regular expressions reference= in /vimbook-opl.pdf/ (which also is in
+this repo) by just searching for this query. _Quick regexp lookup._
+
+You can't talk about regular expressions without mentioning Perl.
+
+The main differences between *Perl* and *Vim* are:
+- Perl doesn't require backslashes before most of its operators. Personally, I
+  think it makes regexps more readable - the less backlashes are there the
+  better.
+- Perl allows you to convert any quantifier into a non-greedy version by adding
+  an extra ? after it. So *? is a non-greedy *.
+- Perl supports a lots of weird options that can be appended to the regexp, or
+  even embedded in it.
+- You can also embed variable names in a Perl regular expression. Perl replaces
+  the name with its value; this is called "variable interpolation".
+
+* Substitute Command
+** Search & Replace
+VIM search and replace command (S&R) :substitute. Here is an excerpt from VIM
+help:
+
+: :range s[ubstitute]/pattern/string/cgiI
+
+For each line in *the range* replace a match of *the pattern* with *the string* where:
+- c :: Confirm each substitution
+- g :: Replace all occurrences in the line (without g - only first).
+- i :: Ignore case for the pattern.
+- I :: Don't ignore case for the pattern.
+
+** Range of Operation, Line Addressing and Marks
+Some Vim commands can accept a *line range* in front of them. Line range consists
+of one or more line specifiers, separated with a comma or semicolon. You can
+also mark your current position in the text typing ml , where "l" can be any
+letter, and use it later defining the line address.
+
+- number :: an absolute line number
+- . :: the current line
+- $ :: the last line in the file
+- % :: the whole file. The same as 1,$
+- 't :: position of mark "t"
+- /pattern[/] :: the next line where text "pattern" matches.
+- ?pattern[?] :: the previous line where text "pattern" matches
+- \/ :: the next line where the previously used search pattern matches
+- \? :: the previous line where the previously used search pattern matches
+- \& :: the next line where the previously used substitute pattern matches
+
+_Examples_:
+- 10,20 :: from 10 to 20 line.
+
+Each may be followed (several times) by "+" or "-" and an optional number. This number is added or subtracted from the preceding line number. If the number is
+omitted, 1 is used.
+
+: /Section 1/+,/Section 2/- :: all lines between Section 1 and Section 2, non-inclusively, i.e. the lines containing Section 1 and Section 2 will not be affected.
+
+: The /pattern/ and ?pattern? may be followed by another address separated by a semicolon. A semicolon between two search patterns tells Vim to find the location of the first pattern, then start searching from that location for the second pattern.
+
+: /Section 1/;/Subsection/-,/Subsection/+ :: first find Section 1, then the first line with Subsection, step one line down (beginning of the range) and find the next line with Subsection, step one line up (end of the range).
+
+The next example shows how you can reuse your search pattern:
+- :/Section/+ y :: this will search for the Section line and yank (copy) one
+  line after into the memory.
+- :// normal p :: and that will search for the next Section line and put (paste)
+  the saved text on the next line.
+
+*Tip 1*: frequently you need to do S&R in a text which contains UNIX file paths -
+text strings with slashes ("/") inside. Because S&R command uses slashes for
+pattern/replacement separation you have to escape every slash in your pattern,
+i.e. use "\/" for every "/" in your pattern:
+
+: s/\/dir1\/dir2\/dir3\/file/dir4\/dir5\/file2/g
+
+To avoid this so-called "backslashitis" you can use different separators in S&R
+(I prefer ":")
+
+: s:/dir1/dir2/dir3/file:/dir4/dir5/file2:g
+* Pattern Description
+** Anchors
+The right way is to put special word boundary symbols "\<" and "\>" around vi:
+~s:\<vi\>:VIM:g~
+
+`\<` - beginning, `/>` - end of a word (`/<for/>` - searches for the _actual_ word
+'for')
+
+To match the lines where vi is the only word: ~s:^vi$:VIM:~
+
+Now suppose you want to replace not only all vi but also Vi and VI. There are several ways to do this:
+- probably the simplest way is to put "i" - ignore case in a pattern %s:vi:VIM:gi
+- define a class of characters. This is a sequence of characters enclosed by
+  square brackets "[" and "]". It matches any character from this set. So
+  ~:%S:[vV]I:vim:~ will match vi and Vi. More on character ranges in the following
+  section.
+
+** "Escaped" characters or VIM metacharacters
+- . :: any character except new line
+- \s :: whitespace character   \S  non-whitespace character
+- \d :: digit  \D  non-digit
+- \x :: hex digit  \X  non-hex digit
+- \o :: octal digit  \O  non-octal digit
+- \h :: head of word character (a,b,c...z,A,B,C...Z and _) \H non-head of word
+  character
+- \p :: printable character  \P  like \p, but excluding digits
+- \w :: word character  \W  non-word character
+- \a :: alphabetic character  \A  non-alphabetic character
+- \l :: lowercase character  \L  non-lowercase character
+- \u :: uppercase character  \U  non-uppercase character
+
+** Quantifiers, Greedy and Non-Greedy
+\=   matches 0 or 1 more of the preceding characters...
+
+This problem can be resolved by using *non-greedy quantifiers*:
+- \{-}  matches 0 or more of the preceding atom, as few as possible
+- \{-n,m}   matches 1 or more of the preceding characters...
+- \{-n,}  matches at lease or more of the preceding characters...
+- \{-,m}   matches 1 or more of the preceding characters...
+
+Let's use \{-} in place of * in our pattern. So, now ".\{-}" will match the first quoted text:
+
+.\{-} pattern is not without surprises. Look what will happen to the following text after we apply: ~:s:.\{-}:_:g~
+
+Before: n and m are decimal numbers between
+After:
+: _n_ _a_n_d_ _m_ _a_r_e_ _d_e_c_i_m_a_l_ _n_u_m_b_e_r_s_ _b_e_t_w_e_e_n_
+
+"As few as possible" applied here means zero character replacements. However
+match does occur between characters! To explain this behavior I quote Bram
+himself:
+
+#+begin_quote
+Matching zero characters is still a match. Thus it will replace zero characters
+with a "_". And then go on to the next position, where it will match again.
+
+It's true that using "\{-}" is mostly useless. It works this way to be
+consistent with "*", which also matches zero characters. There are more useless
+ones: "x\{-1,}" always matches one x. You could just use "x". More useful is
+something like "x\{70}". The others are just consistent behavior: ...,
+"x\{-3,}", "x\{-2,}", "x\{-1,}.
+#+end_quote
+
+But what if we want to match only the second occurrence of quoted text? Or we
+want to replace only a part of the quoted text keeping the rest untouched? We
+will need grouping and backreferences. But before let's talk more about
+character ranges.
+
+** Grouping and Backreferences
+You can group parts of the pattern expression enclosing them with "\(" and "\)"
+and refer to them inside the replacement pattern by their special number \1, \2
+... \9. Typical example is swapping first two words of the line:
+
+: s:\(\w\+\)\(\s\+\)\(\w\+\):\3\2\1:
+
+where \1 holds the first word, \2 - any number of spaces or tabs in between and
+\3 - the second word.
+
+*Replacement Part of :substitute*
+
+Replacement part of the S&R has its own special characters which we are going to
+use to fix grammar:
+
+- & :: the whole matched pattern
+- \0 :: the whole matched pattern
+- \1 .. \9 :: the matched pattern in the 1st .. 9th pair of \(\)
+- ~ :: the previous substitute string
+- \L :: the following characters are made lowercase
+- \U :: the following characters are made uppercase
+- \E :: end of \U and \L
+- \e :: end of \U and \L
+- \r :: split line in two at this point
+- \l ::  next character made lowercase
+- \u :: next character made uppercase
+
+Now the full S&R to correct non-capital words at the beginning of the sentences
+looks like
+
+: s:\([.!?]\)\s\+\([a-z]\):\1  \u\2:g
+
+** Alternations
+Using "\|" you can combine several expressions into one which matches any of its
+components. The first one matched will be used.
+
+: \(Date:\|Subject:\|From:\)\(\s.*\)
+
+will parse various mail headings and their contents into \1 and \2,
+respectively. The thing to remember about *VIM* alternation that it *is not greedy*.
+It won't search for the longest possible match, it will use the first that
+matched. That means that the order of the items in the alternation is important!
+
+** Regexp Operator Precedence
+As in arithmetic expressions, regular expressions are executed in a certain order of precedence. Here the table of precedence, from highest to lowest:
+
+1. \( \)             :: grouping
+2. \=,\+,*,\{n} etc. :: quantifiers
+3. abc\t\.\w         :: sequence of characters/ metacharacters, not containing
+   quantifiers or grouping operators
+4. \|                :: alternation
+
+* Global Command
+** Global search and execution
+*:range g[lobal][!]/pattern/cmd* - Execute the Ex command cmd (default ":p") on
+the lines within [range] where pattern matches. If pattern is preceded with a
+! - only where match does not occur.
+
+*Note*: Ex commands are all commands you are entering on the Vim command line like
+=:s[ubstitute], :co[py] , :d[elete], :w[rite] etc=. Non-Ex commands (normal mode
+commands) can be also executed via ~:norm[al]non-ex command~ mechanism.
+
+** Examples
+
+- :g/^$/ d :: delete all empty lines in a file
+- :g/^$/,/./-j :: reduce multiple blank lines to a single blank
+- :10,20g/^/ mo 10 :: reverse the order of the lines starting from the line 10
+  up to the line 20.
+
+Here is a modified example from Walter Zintz vi tutorial:
+
+: :'a,'b g/^Error/ . w >> errors.txt
+
+... in the text block marked by 'a and 'b find all the lines starting with Error
+and copy (append) them to "errors.txt" file. Note: . (current line address) in
+front of the w is very important, omitting it will cause :write to write the
+whole file to "errors.txt" for every Error line found.
+
+You can give multiple commands after :global using "|" as a separator. If you
+want to use "|' in an argument, precede it with "\'.
+
+Another example from Zintz tutorial:
+
+: :g/^Error:/ copy $ | s /Error/copy of the error/
+
+... will copy all Error line to the end of the file and then make a substitution
+in the copied line. Without giving the line address :s will operate on the
+current line, which is the newly copied line.
+
+: :g/^Error:/ s /Error/copy of the error/ | copy $
+
+... here the order is reversed: first modify the string then copy to the end.
+
+* Examples
+** Creating outline
+For this example you need to know a bit of HTML. We want to make a table of
+contents out of h1 and h2 headings, which I will call majors and minors. HTML
+heading h1 is a text enclosed by <h1> tags as in <h1>Heading</h1>.
+
+*(1)* First let's make named anchors in all headings, i.e. put <h1><a
+name="anchor">Heading</a></h1> around all headings. The "anchor" is a unique
+identifier of this particular place in HTML document. The following S&R does
+exactly this:
+
+: :s:\(<h[12]>\)\(.*\s\+\([-a-zA-Z]\+\)\)\s*\(</h[12]>\):\1<a name="\3">\2</a>\4:
+
+Explanation: the first pair of \(\) saves the opening tag (h1 or h2) to the \1,
+the second pair saves all heading text before the closing tag, the third pair
+saves the last word in the heading which we will later use for "anchor" and the
+last pair saves the closing tag. The replacement is quite obvious - we just
+reconstruct a new "named" heading using \1-\4 and link tag <a>.
+
+*(2)* Now let's copy all headings to one place:
+
+: :%g/<h[12]>/ t$
+
+This command searches our file for the lines starting with <h1> or <h2> and
+copies them to the end of the file. Now we have a bunch of lines like:
+#+begin_src html
+<h1><a name="anchor1">Heading1></a></h1>
+..........................
+<h1><a name="anchorN">HeadingN></a></h1>
+#+end_src
+
+First, we want to convert all name=" to href="# in order to link table entries to their respective places in the text: ~s:name=":href="#:~
+
+Second, we want our h1 entries look different from h2. Let's define CSS classes
+"majorhead" and "minorhead" and do the following:
+
+: g/<h1>/ s:<a:& class="majorhead":
+: g/<h2>/ s:<a:& class="minorhead":
+
+Now our entries look like:
+#+begin_src html
+<h1><a class="majorhead" name="anchor1">Heading1></a></h1>
+<h2><a class="minorhead" name="anchor2">Heading2></a></h2>
+#+end_src
+
+We no longer need h1 and h2 tags: ~s:<h[21]>::~ and replace closing tags with
+breaklines <br>: ~s:/h[21]:br:~
+#+begin_src html
+<a class="majorhead" name="anchor1">Heading1></a><br>
+<a class="minorhead" name="anchor2">Heading2></a><br>
+  6.3 Working with Tables
+#+end_src
+
+Quite often you have to work with a text organized in tables/columns. Consider, for example, the following text
+
+  Asia  America  Africa  Europe
+  Africa  Europe  Europe  Africa
+  Europe  Asia  Europe  Europe
+
+Suppose we want to change all "Europe" cells in the third column to "Asia":
+
+: :%s:\(\(\w\+\s\+\)\{2}\)Europe:\1Asia:
+
+Asia  America  Africa  Europe
+Africa  Europe  Asia  Africa
+Europe  Asia  Asia  Europe
+
+To swap the first and the last columns:
+
+: :%s:\(\w\+\)\(.*\s\+\)\(\w\+\)$:\3\2\1:
+
+Europe  America  Africa  Asia
+Africa  Europe  Europe  Africa
+Europe  Asia  Europe  Europe
