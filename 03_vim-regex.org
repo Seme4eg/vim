@@ -205,6 +205,10 @@ As in arithmetic expressions, regular expressions are executed in a certain orde
 the lines within [range] where pattern matches. If pattern is preceded with a
 ! - only where match does not occur.
 
+_cmd_ can be prepended by the mode like 'norm' and then the commands in that mode:
+- ~g/<regexp>/norm $di'0P~ - will go to end of line, delete in '-quotes, move to
+  beginning of the line and paste what it's just deleted
+
 *Note*: Ex commands are all commands you are entering on the Vim command line like
 =:s[ubstitute], :co[py] , :d[elete], :w[rite] etc=. Non-Ex commands (normal mode
 commands) can be also executed via ~:norm[al]non-ex command~ mechanism.
